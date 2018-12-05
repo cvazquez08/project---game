@@ -4,6 +4,14 @@ const canvasBorderColor = 'black';
 const canvasBackgroundColor  = "lightblue";
 const snakeColor = "lightgreen";
 const snakeBorderColor = "darkgreen";
+// target width and height and set to variable for easy targeting
+const width = document.getElementById("snake-board").width;
+const height = document.getElementById("snake-board").height;
+
+const cellWidth = 10;
+let direction;
+let score;
+
 
 
 // x && y coordinates for snake
@@ -47,6 +55,7 @@ function drawSnakePart(snakePart){
 
 }
 
+// clear canvas - draw background - draw snake
 function updateCanvas(){
   ctx.clearRect(0, 0, 1000, 500);
   drawBackground();
@@ -54,38 +63,58 @@ function updateCanvas(){
 }
 
 
-
+// event listner when key is pressed
 document.onkeydown = function(event) {
 
   let head;
+  let postition;
+  // let move = 10;
 
   switch (event.keyCode) {
     case 38:  //38:upArrow 87:W
     case 87: 
-    head = {x: snake[0].x, y: snake[0].y -10};
+    // head = {x: snake[0].x, y: snake[0].y - move};
+    position = "up";
       break; 
     case 40:  //40:downArrow 83:S
     case 83: 
-    head = {x: snake[0].x, y: snake[0].y + 10};
+    // head = {x: snake[0].x, y: snake[0].y + move};
+    position = "down";
       break; 
     case 37:  //37:leftArrow: 65:A
     case 65: 
-    head = {x: snake[0].x - 10, y: snake[0].y};
+    // head = {x: snake[0].x - move, y: snake[0].y};
+    position = "left";
       break; 
     case 39:  //39:rightArrow 68:D
     case 68: 
-    head = {x: snake[0].x + 10, y: snake[0].y};        
+    // head = {x: snake[0].x + move, y: snake[0].y};   
+    position = "right";     
       break; 
   }
-  // updates canvas on every move
-  advance(head)
-  updateCanvas();
+
+
+
+  // advance(head);
+    move(snake, position);
+
 }
 
+// function to remove back snakePart and move to front
 function advance(head){
-  snake.unshift(head);
-  snake.pop();
+  
+      snake.unshift(head);
+      snake.pop();
+      updateCanvas();
+  
 }
 
+function move(snake){
 
+  for(let i = 0; i < snake.length; i++){
+  snake[i].x + 10;
+}
   updateCanvas();
+}
+
+updateCanvas();
