@@ -1,3 +1,10 @@
 #snake-board{
-  background-color: gray; 
+  padding: 596px;
+  padding-top: 172px; 
   }
+
+body{
+  background-image: url("../images/CV_Project.png");
+  background-repeat: no-repeat;
+  /* background-position: center; */
+}

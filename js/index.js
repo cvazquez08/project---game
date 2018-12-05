@@ -1,120 +1,131 @@
 // const: Colors for background / border
 // colors for snake and snake-border
 const canvasBorderColor = 'black';
-const canvasBackgroundColor  = "lightblue";
-const snakeColor = "lightgreen";
-const snakeBorderColor = "darkgreen";
+const canvasBackgroundColor  = "black";
+const snakeColor = "#20FF00";
+const snakeBorderColor = "#20FF00";
 // target width and height and set to variable for easy targeting
 const width = document.getElementById("snake-board").width;
 const height = document.getElementById("snake-board").height;
-
-const cellWidth = 10;
-let direction;
-let score;
-
-
-
-// x && y coordinates for snake
-// each "square" has it's down x && y axis
-let snake = [
-  {x: 150, y: 150},
-  {x: 140, y: 150},
-  {x: 130, y: 150},
-  {x: 120, y: 150},
-  {x: 110, y: 150}
-]
-
 
 // get the canvas element
 let gameCanvas = document.getElementById("snake-board");
 // get the ctx 
 let ctx = gameCanvas.getContext("2d");
 
-function drawBackground(){
-// set / draw canvas background color
-ctx.fillStyle = canvasBackgroundColor;
-ctx.fillRect(0, 0, 1000, 500);
-//set / draw canvas border color
-ctx.strokestyle = canvasBorderColor;
-ctx.strokeRect(0, 0, 1000, 500);
+const cellWidth = 10;
+let direction;
+let score;
+let snakeArray;
+
+
+// the game function which calls snake / food function in a loop with set interval
+function play(){
+  direction = "right" // setting default direction for constant moving
+  snake();
+  food();
+
+  score = 0;
+
+  if (typeof game_loop != "undefined") clearInterval(game_loop);
+  game_loop = setInterval(paint, 60);
+
+  
 }
 
-// loops through each snakePart and calls drawSnakePart
-function drawSnake() {
-  snake.forEach(drawSnakePart)
+play();
+
+// snake function assigns all objects into array
+function snake(){
+  let length = 5; // starting with 5 blocks
+  snakeArray = []; // starts with empty array
+  //loop through array and create 5 objects with x and y axis
+  for(let i = length - 1; i >= 0; i--){
+    snakeArray.push({x: i, y: 0});
+  }
+
 }
 
+function food(){
+  food = {
+    // randomize an X and Y axis between the board
+    x: Math.round(Math.random() * (width - cellWidth) / cellWidth),
+    y: Math.round(Math.random() * (height - cellWidth) / cellWidth)
 
-function drawSnakePart(snakePart){
-  //  set color / draw snakePart
+  };
+}
+
+function paint(){
+  ctx.fillStyle = canvasBackgroundColor;
+  ctx.fillRect(0, 0, width, height);
+  ctx.strokeStyle = canvasBorderColor;
+  ctx.strokeRect(0, 0, width, height);
+
+  // this loops through snake() 2d array and paints each block
+  for (var i = 0; i < snakeArray.length; i++) {
+    var cell = snakeArray[i];
+    paintCell(cell.x, cell.y);
+  }
+
+  // create movement *pop tail and unshift to head
+
+  // target head x and y axis with variable
+  let headX = snakeArray[0].x;
+  let headY = snakeArray[0].y;
+
+  // add movement
+  if (direction == "right") headX++;
+  else if(direction == "left") headX--;
+  else if(direction == "up") headY--;
+  else if(direction == "down") headY++;
+
+// assigns last object in array to tail variable
+  let tail = snakeArray.pop();
+  tail.x = headX; // reasigns new tail to headX 
+  tail.y = headY; // headY => so snake can keep moving
+  snakeArray.unshift(tail); //unshifts tail to front of array and keeps looping
+  // paint loops every 60ms from the play();
+
+  // paint food = > already have it with random coordinates
+  paintCell(food.x, food.y);
+
+  // add score
+  let scoreText = "Score: " + score;
+  ctx.fillText(scoreText, 20, 410, 50, 50);
+
+}
+
+// generic function for painting snake && food
+function paintCell(x, y) {
   ctx.fillStyle = snakeColor;
-  ctx.fillRect(snakePart.x, snakePart.y, 10, 10);
-  //  set border / draw border for snakePart
-  ctx.strokestyle = snakeBorderColor;
-  ctx.strokeRect(snakePart.x, snakePart.y, 10, 10);
-
+  ctx.fillRect(x * cellWidth, y * cellWidth, cellWidth, cellWidth);
+  ctx.strokeStyle = snakeBorderColor
+  ctx.strokeRect(x * cellWidth, y * cellWidth, cellWidth, cellWidth);
 }
-
-// clear canvas - draw background - draw snake
-function updateCanvas(){
-  ctx.clearRect(0, 0, 1000, 500);
-  drawBackground();
-  drawSnake();
-}
-
 
 // event listner when key is pressed
 document.onkeydown = function(event) {
-
-  let head;
-  let postition;
-  // let move = 10;
-
   switch (event.keyCode) {
     case 38:  //38:upArrow 87:W
     case 87: 
-    // head = {x: snake[0].x, y: snake[0].y - move};
-    position = "up";
+    direction = "up";
       break; 
+
     case 40:  //40:downArrow 83:S
     case 83: 
-    // head = {x: snake[0].x, y: snake[0].y + move};
-    position = "down";
+    direction = "down";
       break; 
+
     case 37:  //37:leftArrow: 65:A
     case 65: 
-    // head = {x: snake[0].x - move, y: snake[0].y};
-    position = "left";
+    direction = "left";
       break; 
+
     case 39:  //39:rightArrow 68:D
     case 68: 
-    // head = {x: snake[0].x + move, y: snake[0].y};   
-    position = "right";     
+    direction = "right";     
       break; 
   }
-
-
-
-  // advance(head);
-    move(snake, position);
-
 }
 
-// function to remove back snakePart and move to front
-function advance(head){
-  
-      snake.unshift(head);
-      snake.pop();
-      updateCanvas();
-  
-}
 
-function move(snake){
-
-  for(let i = 0; i < snake.length; i++){
-  snake[i].x + 10;
-}
-  updateCanvas();
-}
-
-updateCanvas();
