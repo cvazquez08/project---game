@@ -1,10 +1,46 @@
 #snake-board{
-  padding: 596px;
-  padding-top: 172px; 
+  background-color: gray;
+  /* background-image: url("https://static3.scirra.net/images/newstore/products/1119/Splash.png"); */
+  background-position: center;
+  background-size: cover;
+   
   }
+  
+  .flex-container{
+    display: flex;
+   justify-content: center;
+   
+  }
+  
+  .flex-container > div{
+    margin: 10px;
+  }
+  
+  .instructions{
+    border: 2px SOLID #20FF00;
+    padding: 20px;
+    background-color: black;
+    color: #20ff00;
+    font-family: 'VT323', monospace;
+  }
+  
+  .start-game{
+    border: 2px solid #20ff00;
+    background-color: black;
+    color: #20ff00;
+    font-family: 'VT323', monospace;
+    font-size: 25px;
+  }
+  
+   
+  a{
+    font-size: 24px;
+    color: white;
+    /* padding: 40px; */
+    margin: 40px;
+  }
+  
+  p{
+    font-size: 25px;
 
-body{
-  background-image: url("../images/CV_Project.png");
-  background-repeat: no-repeat;
-  /* background-position: center; */
-}
+  }
