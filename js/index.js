@@ -20,27 +20,33 @@ let direction;
 let score;
 let snakeArray;
 let game_loop;
+let intervalTime;
+let isOver = false;
+
+
 
 // the game function which calls snake / food function in a loop with set interval
 function play(){
   direction = "right" // setting default direction for constant moving
-  snake();
-  randomFood();
+  snake();  // call snake function which creates array
+  randomFood(); // call randomFood function which randomizes position of food
 
-  score = 0;
+  score = 0; // default score 0
 
+ 
+     // setInterval for paint - which clears and redraws game to animate movement
   if (typeof game_loop != "undefined") clearInterval(game_loop);
-  // maybe useless line = > can use to stop game.
-  game_loop = setInterval(paint, 50);
+  game_loop = setInterval(paint, 100);
 
-  
-}
+  }
+
+
 
 // on click for play button
 const playBtn = document.getElementsByClassName("start-game")[0];
-
 playBtn.onclick = function(){
   play();
+  isOver = false;
 }
 
 // snake function assigns all objects into array
@@ -54,16 +60,18 @@ function snake(){
 
 }
 
+// function which randomized position of food
 function randomFood(){
   food = {
-    // randomize an X and Y axis between the board
-    x: Math.round(Math.random() * (width - cellWidth) / cellWidth),
-    y: Math.round(Math.random() * (height - cellWidth) / cellWidth)
+    x: Math.round(Math.random() * (width - cellWidth) / cellWidth), // randomize x axis
+    y: Math.round(Math.random() * (height - cellWidth) / cellWidth) // randomize y axis
 
   };
 }
 
+// main game function = > controls canvas, background, snake, food and collision
 function paint(){
+  // canvas and background
   ctx.fillStyle = canvasBackgroundColor;
   ctx.fillRect(0, 0, width, height);
   ctx.strokeStyle = canvasBorderColor;
@@ -75,18 +83,27 @@ function paint(){
     paintCell(cell.x, cell.y);
   }
 
-  // create movement *pop tail and unshift to head
 
   // target head x and y axis with variable
   let headX = snakeArray[0].x;
   let headY = snakeArray[0].y;
 
   // add movement
+  if(!isOver){
   if (direction === "right") headX++;
   else if(direction === "left") headX--;
   else if(direction === "up") headY--;
   else if(direction === "down") headY++;
 
+  }
+
+  // check collision for bounders and call checkCollision function
+  // for collision with itself
+  if(headX < -1 || headX > (width / cellWidth) || headY < -1 || headY > (height / cellWidth) || checkCollision(headX, headY, snakeArray)){
+    gameOver();
+  }else{
+
+  // if snakeHead touches food - add food to snakebody
   if(headX == food.x && headY == food.y){
 
     let tail = {x: headX, y: headY};
@@ -101,10 +118,8 @@ function paint(){
   tail.y = headY; // headY => so snake can keep moving
   snakeArray.unshift(tail); //unshifts tail to front of array and keeps looping
   // paint loops every 60ms from the play();
-
   }
-
-  
+  }
 
   // paint food = > already have it with random coordinates
   paintFood(food.x, food.y);
@@ -125,6 +140,7 @@ function paintCell(x, y) {
   ctx.strokeRect(x * cellWidth, y * cellWidth, cellWidth, cellWidth);
 }
 
+// function for drawing food - split function for different color food
 function paintFood(x, y){
   ctx.fillStyle = foodColor;
   ctx.fillRect(x * cellWidth, y * cellWidth, cellWidth, cellWidth);
@@ -132,39 +148,79 @@ function paintFood(x, y){
   ctx.strokeRect(x * cellWidth, y * cellWidth, cellWidth, cellWidth);  
 
 }
+
+// function to check collision
+function checkCollision(x, y, array){
+  // loop through snake array and see if any x&y coordinates
+  // are touching another x&y coordinate of body
+  for(let i = 0; i < array.length; i++){
+    if(array[i].x === x && array[i].y === y) 
+    return true;
+  }
+    return false;
+}
+
+function gameOver(){
+  ctx.clearRect(0, 0, width, height);
+  
+  isOver = true;
+  
+  const gameOverImg = new Image();
+  gameOverImg.src = "images/game-over.png";
+
+  gameOverImg.onload = function(){
+    ctx.drawImage(gameOverImg, 0, 0, width, height); 
+
+  }
+
+}
+
 // event listner when key is pressed
 document.onkeydown = function(event) {
+
   switch (event.keyCode) {
     case 38:  //38:upArrow 87:W
     case 87: 
     if(direction != "down"){
-    direction = "up";
+      setTimeout(function(){
+
+        direction = "up";
+      }, 75)
     }
       break; 
 
     case 40:  //40:downArrow 83:S
     case 83: 
     if(direction != "up"){
-    direction = "down";
+      setTimeout(function(){
+
+        direction = "down";
+      }, 75)
     }
       break; 
 
     case 37:  //37:leftArrow: 65:A
     case 65: 
     if(direction != "right"){
-    direction = "left";
-    }
+      setTimeout(function(){
+
+        direction = "left";
+      }, 75)    }
       break; 
 
     case 39:  //39:rightArrow 68:D
     case 68: 
     if(direction != "left"){
-    direction = "right";    
+
+      setTimeout(function(){
+
+        direction = "right";
+      }, 75)    
     } 
       break; 
   }
 
-  console.log(event.keyCode);
+ 
 }
 
 

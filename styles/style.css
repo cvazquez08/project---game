@@ -1,9 +1,14 @@
 #snake-board{
-  background-color: gray;
-  /* background-image: url("https://static3.scirra.net/images/newstore/products/1119/Splash.png"); */
+  background-image: url("../images/snakeLogo.png");
+  background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-   
+  
+
+  }
+
+  body{
+    background-image: url("../images/background.jpg");
   }
   
   .flex-container{
