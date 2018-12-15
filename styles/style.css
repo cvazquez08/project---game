@@ -1,11 +1,10 @@
-#snake-board{
+#snake-board{ 
   background-image: url("../images/snakeLogo.png");
   background-repeat: no-repeat;
   background-position: center;
-  background-size: cover;
+  background-size: cover; 
   
-
-  }
+  } 
 
   body{
     background-image: url("../images/background.jpg");
@@ -29,14 +28,15 @@
     font-family: 'VT323', monospace;
   }
   
-  .start-game{
+  #start-game{
     border: 2px solid #20ff00;
     background-color: black;
     color: #20ff00;
     font-family: 'VT323', monospace;
     font-size: 25px;
   }
-  
+
+
    
   a{
     font-size: 24px;

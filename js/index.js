@@ -1,6 +1,6 @@
 // const: Colors for background / border
 // colors for snake and snake-border
-const canvasBorderColor = 'black';
+const canvasBorderColor = "#20FF00";
 const canvasBackgroundColor  = "black";
 const snakeColor = "#20FF00";
 const snakeBorderColor = "black";
@@ -15,14 +15,15 @@ let gameCanvas = document.getElementById("snake-board");
 // get the ctx 
 let ctx = gameCanvas.getContext("2d");
 
+// const for width of snakeBody
 const cellWidth = 10;
+// set variables in global scope that will change in later functions
 let direction;
 let score;
 let snakeArray;
 let game_loop;
 let intervalTime;
 let isOver = false;
-
 
 
 // the game function which calls snake / food function in a loop with set interval
@@ -33,17 +34,17 @@ function play(){
 
   score = 0; // default score 0
 
- 
-     // setInterval for paint - which clears and redraws game to animate movement
+   // setInterval for paint - which clears and redraws game to animate movement
   if (typeof game_loop != "undefined") clearInterval(game_loop);
   game_loop = setInterval(paint, 100);
-
-  }
+  
+}
 
 
 
 // on click for play button
-const playBtn = document.getElementsByClassName("start-game")[0];
+const playBtn = document.getElementById("start-game");
+
 playBtn.onclick = function(){
   play();
   isOver = false;
@@ -75,9 +76,10 @@ function paint(){
   ctx.fillStyle = canvasBackgroundColor;
   ctx.fillRect(0, 0, width, height);
   ctx.strokeStyle = canvasBorderColor;
+  ctx.lineWidth = 2;
   ctx.strokeRect(0, 0, width, height);
 
-  // this loops through snake() 2d array and paints each block
+  // this loops through snake[] array and paints each block
   for (var i = 0; i < snakeArray.length; i++) {
     var cell = snakeArray[i];
     paintCell(cell.x, cell.y);
@@ -88,7 +90,7 @@ function paint(){
   let headX = snakeArray[0].x;
   let headY = snakeArray[0].y;
 
-  // add movement
+  // add constant movement
   if(!isOver){
   if (direction === "right") headX++;
   else if(direction === "left") headX--;
@@ -97,19 +99,19 @@ function paint(){
 
   }
 
-  // check collision for bounders and call checkCollision function
+  // check collision for bounderies and call checkCollision function
   // for collision with itself
-  if(headX < -1 || headX > (width / cellWidth) || headY < -1 || headY > (height / cellWidth) || checkCollision(headX, headY, snakeArray)){
+  if(headX < - 1|| headX > (width / cellWidth) || headY < - 1|| headY > (height / cellWidth) || checkCollision(headX, headY, snakeArray)){
     gameOver();
   }else{
 
-  // if snakeHead touches food - add food to snakebody
+  // if snakeHead touches food => add food to snakebody
   if(headX == food.x && headY == food.y){
 
-    let tail = {x: headX, y: headY};
+    let tail = {x: headX, y: headY}; // set the end of snake to "head", and unshift to front
     snakeArray.unshift(tail);
-    score++;
-    randomFood();
+    score++; // add 1 to score
+    randomFood(); // call another "food"
   }else {
   
     // if not assign last object in array to tail variable
@@ -160,15 +162,18 @@ function checkCollision(x, y, array){
     return false;
 }
 
-function gameOver(){
-  ctx.clearRect(0, 0, width, height);
-  
+// game over function
+function gameOver(){  
   isOver = true;
-  
+  // if game is over, clear the interval
+  clearInterval(game_loop);
+  // set variable for image
   const gameOverImg = new Image();
   gameOverImg.src = "images/game-over.png";
-
+  // clear canvas and draw image
   gameOverImg.onload = function(){
+  
+    ctx.clearRect(0, 0, width, height);
     ctx.drawImage(gameOverImg, 0, 0, width, height); 
 
   }
@@ -220,7 +225,5 @@ document.onkeydown = function(event) {
       break; 
   }
 
- 
 }
-
 
