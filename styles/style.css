@@ -1,5 +1,5 @@
 #snake-board{ 
-  background-image: url("../images/snakeLogo.png");
+  background-image: url("../images/snake-bg.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover; 
@@ -12,12 +12,13 @@
   
   .flex-container{
     display: flex;
-   justify-content: center;
-   
+    justify-content: center;
+    
   }
   
   .flex-container > div{
     margin: 10px;
+  
   }
   
   .instructions{
@@ -37,7 +38,6 @@
   }
 
 
-   
   a{
     font-size: 24px;
     color: white;
@@ -49,3 +49,5 @@
     font-size: 25px;
 
   }
+
+\
